@@ -1,0 +1,16 @@
+{
+  "name": "mha-dialog-download",
+  "main": "mha-dialog-download.html",
+  "dependencies": {
+    "polymer": "Polymer/polymer",
+    "mha-dialog-loading": "https://github.com/faan11/mha-dialog-loading.git",
+    "iron-ajax": "PolymerElements/iron-ajax",
+    "iron-image": "PolymerElements/iron-image#^2.0.0"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page",
+    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#",
+    "web-component-tester": "",
+    "webcomponentsjs": "webcomponents/webcomponentsjs"
+  }
+}

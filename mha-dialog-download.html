@@ -1,0 +1,273 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../mha-dialog-loading/mha-dialog-loading.html">
+<link rel="import" href="../iron-ajax/iron-ajax.html">
+
+<!--
+`mha-dialog-download`
+
+
+@demo demo/index.html
+-->
+
+<dom-module id="mha-dialog-download">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+
+      <iron-ajax auto="{{auto}}"
+          url="{{url}}"
+          params='{{params}}'
+          handle-as="{{returns}}"
+          loading="{{loading}}"
+          headers="{{headers}}"
+          content-type="{{contentType}}"
+          method="{{method}}"
+          last-response="{{lastResponse}}"
+          last-error="{{lastError}}"
+          >
+      </iron-ajax>
+      <mha-dialog-loading id="loadingD"> </mha-dialog-loading>
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'mha-dialog-download',
+      properties: {
+
+        url: {
+          type: String,
+          notify:true
+        },
+
+        /**
+         * An object that contains query parameters to be appended to the
+         * specified `url` when generating a request. If you wish to set the body
+         * content when making a POST request, you should use the `body` property
+         * instead.
+         */
+        params: {
+          type: Object,
+          notify:true,
+          value: function() {
+            return {};
+          }
+        },
+
+        /**
+         * The HTTP method to use such as 'GET', 'POST', 'PUT', or 'DELETE'.
+         * Default is 'GET'.
+         */
+        method: {
+          type: String,
+          notify:true,
+          value: 'GET'
+        },
+
+        /**
+         * HTTP request headers to send.
+         *
+         * Example:
+         *
+         *     <iron-ajax
+         *         auto
+         *         url="http://somesite.com"
+         *         headers='{"X-Requested-With": "XMLHttpRequest"}'
+         *         handle-as="json"></iron-ajax>
+         *
+         * Note: setting a `Content-Type` header here will override the value
+         * specified by the `contentType` property of this element.
+         */
+        headers: {
+          type: Object,
+          notify:true,
+          value: function() {
+            return {};
+          }
+        },
+
+        /**
+         * Content type to use when sending data. If the `contentType` property
+         * is set and a `Content-Type` header is specified in the `headers`
+         * property, the `headers` property value will take precedence.
+         *
+         * Varies the handling of the `body` param.
+         */
+        contentType: {
+          type: String,
+          notify:true,
+          value: null
+        },
+
+        /**
+         * Body content to send with the request, typically used with "POST"
+         * requests.
+         *
+         * If body is a string it will be sent unmodified.
+         *
+         * If Content-Type is set to a value listed below, then
+         * the body will be encoded accordingly.
+         *
+         *    * `content-type="application/json"`
+         *      * body is encoded like `{"foo":"bar baz","x":1}`
+         *    * `content-type="application/x-www-form-urlencoded"`
+         *      * body is encoded like `foo=bar+baz&x=1`
+         *
+         * Otherwise the body will be passed to the browser unmodified, and it
+         * will handle any encoding (e.g. for FormData, Blob, ArrayBuffer).
+         *
+         * @type (ArrayBuffer|ArrayBufferView|Blob|Document|FormData|null|string|undefined|Object)
+         */
+        body: {
+          type: Object,
+          notify:true,
+          value: null
+        },
+
+        /**
+         * Toggle whether XHR is synchronous or asynchronous. Don't change this
+         * to true unless You Know What You Are Doing™.
+         */
+        sync: {
+          type: Boolean,
+          notify:true,
+          value: false
+        },
+
+        /**
+         * Specifies what data to store in the `response` property, and
+         * to deliver as `event.detail.response` in `response` events.
+         *
+         * One of:
+         *
+         *    `text`: uses `XHR.responseText`.
+         *
+         *    `xml`: uses `XHR.responseXML`.
+         *
+         *    `json`: uses `XHR.responseText` parsed as JSON.
+         *
+         *    `arraybuffer`: uses `XHR.response`.
+         *
+         *    `blob`: uses `XHR.response`.
+         *
+         *    `document`: uses `XHR.response`.
+         */
+        handleAs: {
+          type: String,
+          notify:true,
+          value: 'json'
+        },
+
+        /**
+         * Set the withCredentials flag on the request.
+         */
+        withCredentials: {
+          type: Boolean,
+          notify:true,
+          value: false
+        },
+
+        /**
+         * Set the timeout flag on the request.
+         */
+        timeout: {
+          type: Number,
+          notify:true,
+          value: 0
+        },
+
+        /**
+         * If true, automatically performs an Ajax request when either `url` or
+         * `params` changes.
+         */
+        auto: {
+          type: Boolean,
+          notify:true,
+          value: false
+        },
+
+        /**
+         * If true, error messages will automatically be logged to the console.
+         */
+        verbose: {
+          type: Boolean,
+          notify:true,
+          value: false
+        },
+
+        /**
+         * The most recent request made by this iron-ajax element.
+         */
+        lastRequest: {
+          type: Object,
+          notify: true
+        },
+
+        /**
+         * True while lastRequest is in flight.
+         */
+        loading: {
+          type: Boolean,
+          notify: true,
+          observer:"_changeLoading"
+        },
+
+        /**
+         * lastRequest's response.
+         *
+         * Note that lastResponse and lastError are set when lastRequest finishes,
+         * so if loading is true, then lastResponse and lastError will correspond
+         * to the result of the previous request.
+         *
+         * The type of the response is determined by the value of `handleAs` at
+         * the time that the request was generated.
+         *
+         * @type {Object}
+         */
+        lastResponse: {
+          type: Object,
+          notify: true,
+          observer:"_changeResponse"
+        },
+
+        /**
+         * lastRequest's error, if any.
+         *
+         * @type {Object}
+         */
+        lastError: {
+          type: Object,
+          notify: true
+        },
+
+        withLoadingDialog: {
+          type: Boolean,
+          notify:true,
+          value: false,
+          observer:"_changeLoadingDialog"
+        },
+      },
+      _changeLoadingDialog:function(newValue,oldValue){
+        if (newValue == true && this.loading == true){
+          this.$.loadingD.open();
+        }
+        if (newValue == false && this.loading == true){
+          this.$.loadingD.close();
+        }
+      },
+      _changeLoading:function(newValue,oldValue){
+
+        if (newValue == true && this.withLoadingDialog == true ){
+          this.$.loadingD.open();
+        }
+        if (newValue == false && this.withLoadingDialog == true){
+          this.$.loadingD.close();
+        }
+      }
+
+    });
+  </script>
+</dom-module>
