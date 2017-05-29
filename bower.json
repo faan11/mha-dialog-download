@@ -5,7 +5,7 @@
     "polymer": "Polymer/polymer",
     "mha-dialog-loading": "https://github.com/faan11/mha-dialog-loading.git",
     "iron-ajax": "PolymerElements/iron-ajax",
-    "iron-image": "PolymerElements/iron-image#^2.0.0"
+    "iron-image": "PolymerElements/iron-image"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page",
