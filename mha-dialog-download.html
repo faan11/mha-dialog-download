@@ -17,7 +17,7 @@
       }
     </style>
 
-      <iron-ajax auto="{{auto}}"
+      <iron-ajax id="ajax_connection" auto="{{auto}}"
           url="{{url}}"
           params='{{params}}'
           handle-as="{{returns}}"
@@ -266,6 +266,9 @@
         if (newValue == false && this.withLoadingDialog == true){
           this.$.loadingD.close();
         }
+      },
+      generateRequest:function(){
+        this.$.ajax_connection.generateRequest();
       }
 
     });
