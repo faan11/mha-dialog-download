@@ -59,7 +59,7 @@
         handle-as="json"
         last-response="{{ajaxResponse}}">
       </mha-dialog-download>
-        {{ajaxResponse}}
+
         <!--<div class="horizontal-section-container">
           <template is="dom-repeat" items="[[ajaxResponse.items]]">
             <div class="horizontal-section">
@@ -70,18 +70,6 @@
           </template>
         </div>-->
 
-      <script>
-        window.addEventListener('WebComponentsReady', function() {
-          Polymer({
-            is: 'iron-ajax-demo',
-
-            url: function(videoId) {
-              return 'https://www.youtube.com/watch?v=' + videoId;
-            }
-          });
-        })
-      </script>
-      <iron-ajax-demo></iron-ajax-demo>
       </template>
     </demo-snippet>
   </div>

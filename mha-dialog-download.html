@@ -267,6 +267,9 @@
           this.$.loadingD.close();
         }
       },
+      _changeResponse:function(){
+        this.fire("response");
+      }
       generateRequest:function(){
         this.$.ajax_connection.generateRequest();
       }
