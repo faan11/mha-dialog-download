@@ -246,24 +246,28 @@
         withLoadingDialog: {
           type: Boolean,
           notify:true,
-          value: false,
-          observer:"_changeLoadingDialog"
-        },
+          value: true
+        }
       },
-      _changeLoadingDialog:function(newValue,oldValue){
-        if (newValue == true && this.loading == true){
+      observers: [
+        '_changeLoading(loading, withLoadingDialog)'
+        /*'_changeLoadingDialog(withLoadingDialog, loading)',*/
+
+      ],
+      /*_changeLoadingDialog:function(withLoadingDialog,loading){
+        if (withLoadingDialog == true && loading == true){
           this.$.loadingD.open();
         }
-        if (newValue == false && this.loading == true){
+        if (withLoadingDialog == false && loading == true){
           this.$.loadingD.close();
         }
-      },
-      _changeLoading:function(newValue,oldValue){
+      },*/
+      _changeLoading:function(newValue,withLoadingDialog){
 
-        if (newValue == true && this.withLoadingDialog == true ){
+        if (newValue == true && withLoadingDialog == true ){
           this.$.loadingD.open();
         }
-        if (newValue == false && this.withLoadingDialog == true){
+        if (newValue == false && withLoadingDialog == true){
           this.$.loadingD.close();
         }
       },
@@ -271,6 +275,9 @@
         this.fire("response");
       },
       generateRequest:function(){
+        if (this.withLoadingDialog == true){
+          this.$.loadingD.open();
+        }
         this.$.ajax_connection.generateRequest();
       }
 
